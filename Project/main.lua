@@ -38,3 +38,5 @@ local function onOrientationChange(event)
     timer.performWithDelay( 10, createWebView )
 end
 Runtime:addEventListener("orientation", onOrientationChange)
+
+-- тест сборки
