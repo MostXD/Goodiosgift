@@ -3,21 +3,26 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Corona/Solar2D CLI
-        run: |
-          curl -L -o solar2d.dmg https://github.com
-          hdiutil attach solar2d.dmg
-          sudo cp -R /Volumes/Solar2D/Solar2D.app /Applications/
-          hdiutil detach /Volumes/Solar2D
+      - name: Setup Solar2D
+        uses: solar2d/setup-solar2d@v1
+        with:
+          version: 'latest'
 
       - name: Build IPA
         run: |
-          /Applications/Solar2D.app/Contents/Resources/carat build \
+          mkdir -p Build
+          solar2d-cli build \
             --platform iphone \
             --project Project/ \
             --output Build/
+
+      - name: Upload Finished Game
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-ios-game
+          path: Build/
