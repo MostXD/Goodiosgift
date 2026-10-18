@@ -1,4 +1,4 @@
-name: Build Solar2D Game
+name: Build iOS Game
 on: [push, workflow_dispatch]
 
 jobs:
@@ -8,7 +8,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build Web Version
+      - name: Setup Corona/Solar2D CLI
         run: |
-          echo "Робот на связи! Проверяем файлы игры:"
-          ls -R Project/
+          curl -L -o solar2d.dmg https://github.com
+          hdiutil attach solar2d.dmg
+          sudo cp -R /Volumes/Solar2D/Solar2D.app /Applications/
+          hdiutil detach /Volumes/Solar2D
+
+      - name: Build IPA
+        run: |
+          /Applications/Solar2D.app/Contents/Resources/carat build \
+            --platform iphone \
+            --project Project/ \
+            --output Build/
