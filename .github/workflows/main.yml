@@ -1,0 +1,14 @@
+name: Build Solar2D Game
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Web Version
+        run: |
+          echo "Робот на связи! Проверяем файлы игры:"
+          ls -R Project/
